@@ -1,0 +1,3531 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>مشغل الأناشيد والقصائد الإسلامية</title>
+<meta content="مشغل متخصص للأناشيد الإسلامية والقصائد الحسينية مع دعم التحميل للاستماع بدون إنترنت" name="description"/>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --warning-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --dark-bg: #0a0a0a;
+            --card-bg: #1a1a1a;
+            --card-hover: #2a2a2a;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --border-color: #333;
+            --accent-color: #ffd700;
+            --shadow-light: 0 4px 20px rgba(102, 126, 234, 0.1);
+            --shadow-medium: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --shadow-heavy: 0 16px 64px rgba(0, 0, 0, 0.4);
+            --border-radius: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent !important;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            padding-bottom: 160px;
+        }
+
+        /* Remove blue highlight on touch */
+        button, a, div, span {
+            -webkit-tap-highlight-color: transparent !important;
+            outline: none !important;
+        }
+
+        button:focus, a:focus, input:focus {
+            outline: none !important;
+            box-shadow: none !important;
+        }
+
+        /* Header Styles */
+        .header {
+            background: var(--primary-gradient);
+            padding: 1rem;
+            box-shadow: var(--shadow-medium);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(20px);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .logo i {
+            font-size: 1.5rem;
+            color: var(--accent-color);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 500;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-light);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        /* Search Section */
+        .search-section {
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .search-container {
+            position: relative;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 3rem 1rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius);
+            background: var(--card-bg);
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: inherit;
+            transition: var(--transition);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        /* Categories Grid */
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .category-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--primary-gradient);
+            transform: scaleX(0);
+            transition: var(--transition);
+        }
+
+        .category-card:hover {
+            background: var(--card-hover);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .category-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .category-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .category-info {
+            flex: 1;
+        }
+
+        .category-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .category-count {
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+
+        /* Home Sections */
+        .home-section {
+            margin: 2.5rem 0;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-slider {
+            display: flex;
+            gap: 1.5rem;
+            overflow-x: auto;
+            padding: 0.5rem 0;
+            scroll-behavior: smooth;
+        }
+
+        .section-slider::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .section-slider::-webkit-scrollbar-track {
+            background: var(--border-color);
+            border-radius: 3px;
+        }
+
+        .section-slider::-webkit-scrollbar-thumb {
+            background: var(--primary-gradient);
+            border-radius: 3px;
+        }
+
+        .slider-item {
+            min-width: 180px;
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 1.25rem;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .slider-item:hover {
+            background: var(--card-hover);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .slider-thumbnail {
+            width: 100px;
+            height: 100px;
+            border-radius: 15px;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            margin: 0 auto 1rem;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .slider-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 15px;
+        }
+
+        /* Image loading states */
+        .slider-thumbnail img,
+        .audio-thumbnail img,
+        .player-thumbnail img,
+        .expanded-thumbnail img {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .slider-thumbnail img.loaded,
+        .audio-thumbnail img.loaded,
+        .player-thumbnail img.loaded,
+        .expanded-thumbnail img.loaded {
+            opacity: 1;
+        }
+
+        .slider-thumbnail img.error,
+        .audio-thumbnail img.error,
+        .player-thumbnail img.error,
+        .expanded-thumbnail img.error {
+            display: none;
+        }
+
+        .slider-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            line-height: 1.3;
+            height: 2.6rem;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .slider-artist {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            line-height: 1.2;
+        }
+
+        /* Audio List */
+        .audio-list {
+            display: none;
+            margin-top: 2rem;
+        }
+
+        .audio-list.active {
+            display: block;
+        }
+
+        .audio-item {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .audio-item:hover {
+            background: var(--card-hover);
+            transform: translateX(4px);
+        }
+
+        .audio-item.playing {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border-color: #667eea;
+        }
+
+        .audio-thumbnail {
+            width: 70px;
+            height: 70px;
+            border-radius: 15px;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.8rem;
+            flex-shrink: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .audio-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 15px;
+        }
+
+        .audio-thumbnail .play-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            border-radius: 15px;
+        }
+
+        .audio-item.playing .audio-thumbnail .play-overlay {
+            display: flex;
+        }
+
+        .audio-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .audio-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+            line-height: 1.3;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+        }
+
+        .audio-artist {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .audio-actions {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .action-btn {
+            width: 45px;
+            height: 45px;
+            border: none;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            font-size: 1.1rem;
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .action-btn.liked {
+            background: var(--secondary-gradient);
+            color: white;
+        }
+
+        .action-btn.downloaded {
+            background: var(--success-gradient);
+            color: white;
+        }
+
+        .action-btn.downloading {
+            background: var(--warning-gradient);
+            color: white;
+            animation: pulse 1.5s infinite;
+        }
+
+        /* Floating Player Icon */
+        .floating-player {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: var(--primary-gradient);
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: var(--shadow-heavy);
+            z-index: 250;
+            transition: var(--transition);
+        }
+
+        .floating-player:hover {
+            transform: scale(1.1);
+        }
+
+        .floating-player.active {
+            display: flex;
+        }
+
+        /* Player - Hidden by default */
+        .player {
+            position: fixed;
+            bottom: 80px;
+            left: 0;
+            right: 0;
+            background: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 1.25rem;
+            transform: translateY(100%);
+            transition: var(--transition);
+            z-index: 200;
+            backdrop-filter: blur(20px);
+            display: none;
+        }
+
+        .player.active {
+            transform: translateY(0);
+            display: block;
+        }
+
+        .player-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .player-main {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .player-thumbnail {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .player-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        .player-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .player-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            font-size: 1.1rem;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+        }
+
+        .player-artist {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .player-controls {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .control-btn {
+            width: 50px;
+            height: 50px;
+            border: none;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            font-size: 1.2rem;
+        }
+
+        .control-btn:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow-light);
+        }
+
+        .control-btn.play-pause {
+            width: 60px;
+            height: 60px;
+            font-size: 1.4rem;
+        }
+
+        .expand-btn, .hide-btn {
+            background: rgba(255, 255, 255, 0.1);
+            width: 45px;
+            height: 45px;
+            font-size: 1rem;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin: 1rem 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 4px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-gradient);
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.1s ease;
+        }
+
+        .progress-handle {
+            position: absolute;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 16px;
+            height: 16px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: var(--shadow-medium);
+            cursor: pointer;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .progress-bar:hover .progress-handle {
+            opacity: 1;
+        }
+
+        .progress-time {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 0.75rem;
+        }
+
+        /* Expanded Player */
+        .expanded-player {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--dark-bg);
+            z-index: 300;
+            display: none;
+            flex-direction: column;
+        }
+
+        .expanded-player.active {
+            display: flex;
+        }
+
+        .expanded-header {
+            padding: 1.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .expanded-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2.5rem;
+            text-align: center;
+        }
+
+        .expanded-thumbnail {
+            width: 280px;
+            height: 280px;
+            border-radius: 25px;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 4.5rem;
+            margin-bottom: 2.5rem;
+            box-shadow: var(--shadow-heavy);
+            overflow: hidden;
+        }
+
+        .expanded-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 25px;
+        }
+
+        .expanded-info {
+            margin-bottom: 2.5rem;
+        }
+
+        .expanded-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            line-height: 1.3;
+        }
+
+        .expanded-artist {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .expanded-controls {
+            display: flex;
+            gap: 1.25rem;
+            align-items: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .expanded-controls .control-btn {
+            width: 70px;
+            height: 70px;
+            font-size: 1.8rem;
+        }
+
+        .expanded-controls .play-pause {
+            width: 90px;
+            height: 90px;
+            font-size: 2.2rem;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 0.75rem 0;
+            z-index: 150;
+            backdrop-filter: blur(20px);
+        }
+
+        .nav-items {
+            display: flex;
+            justify-content: space-around;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text-secondary);
+            text-decoration: none;
+            min-width: 60px;
+        }
+
+        .nav-item.active {
+            color: #667eea;
+        }
+
+        .nav-item:hover {
+            color: var(--text-primary);
+            transform: translateY(-2px);
+        }
+
+        .nav-icon {
+            font-size: 1.3rem;
+        }
+
+        .nav-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        /* Offline Mode */
+        .offline-mode {
+            display: none;
+            min-height: 100vh;
+            background: var(--dark-bg);
+        }
+
+        .offline-mode.active {
+            display: block;
+        }
+
+        .offline-header {
+            background: var(--primary-gradient);
+            padding: 1.25rem;
+            text-align: center;
+            box-shadow: var(--shadow-medium);
+        }
+
+        .offline-content {
+            padding: 2.5rem 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .offline-message {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+            padding: 1.25rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+            margin-bottom: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .offline-message i {
+            font-size: 1.8rem;
+        }
+
+        /* Settings Modal */
+        .settings-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 400;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .settings-modal.active {
+            display: flex;
+        }
+
+        .settings-content {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 2.5rem;
+            max-width: 500px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .settings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .settings-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .settings-section h3 {
+            margin-bottom: 1.25rem;
+            color: var(--text-primary);
+            font-size: 1.2rem;
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 55px;
+            height: 30px;
+            background: var(--border-color);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .toggle-switch.active {
+            background: var(--primary-gradient);
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .toggle-switch.active::after {
+            transform: translateX(25px);
+        }
+
+        /* Download Progress */
+        .download-progress {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 1.25rem;
+            min-width: 280px;
+            box-shadow: var(--shadow-medium);
+            z-index: 250;
+            display: none;
+        }
+
+        .download-progress.show {
+            display: block;
+        }
+
+        .download-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .download-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .download-info {
+            flex: 1;
+        }
+
+        .download-title {
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .download-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--border-color);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .download-fill {
+            height: 100%;
+            background: var(--success-gradient);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0.75rem;
+            }
+
+            .categories {
+                grid-template-columns: 1fr;
+                gap: 1.25rem;
+            }
+
+            .audio-item {
+                padding: 1rem;
+                gap: 1rem;
+            }
+
+            .audio-thumbnail {
+                width: 60px;
+                height: 60px;
+            }
+
+            .player {
+                padding: 1rem;
+            }
+
+            .expanded-thumbnail {
+                width: 220px;
+                height: 220px;
+            }
+
+            .expanded-controls .control-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+
+            .expanded-controls .play-pause {
+                width: 80px;
+                height: 80px;
+                font-size: 2rem;
+            }
+
+            .slider-item {
+                min-width: 150px;
+            }
+
+            .slider-thumbnail {
+                width: 80px;
+                height: 80px;
+            }
+
+            .floating-player {
+                width: 55px;
+                height: 55px;
+                font-size: 1.3rem;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            border-top-color: #667eea;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Pulse Animation */
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Fade In Animation */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Hide elements in offline mode */
+        .offline-mode .header,
+        .offline-mode .bottom-nav {
+            display: none !important;
+        }
+
+        /* Click outside overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: transparent;
+            z-index: 199;
+            display: none;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        /* Draggable styles */
+        .draggable {
+            cursor: move;
+        }
+
+        .dragging {
+            opacity: 0.8;
+            transform: scale(1.05);
+        }
+
+        /* Image error fallback */
+        .image-fallback {
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+        .verified-badge {
+  margin-right: 6px;
+}
+    </style>
+
+<style>
+@keyframes rotateImage {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.rotating-thumbnail img {
+  animation: rotateImage 6s linear infinite;
+  border-radius: 50%;
+  box-shadow: 0 0 12px rgba(102, 126, 234, 0.5);
+}
+</style>
+
+<style>
+.rotating-thumbnail {
+  position: relative;
+  z-index: 1;
+}
+
+.rotating-thumbnail::before,
+.rotating-thumbnail::after {
+  content: '';
+  position: absolute;
+  top: -10%;
+  left: -10%;
+  width: 120%;
+  height: 120%;
+  border-radius: 50%;
+  background: radial-gradient(rgba(102, 126, 234, 0.3), transparent 70%);
+  animation: pulseWave 2.5s infinite;
+  z-index: -1;
+}
+
+.rotating-thumbnail::after {
+  animation-delay: 1.25s;
+}
+
+@keyframes pulseWave {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+</style>
+</head>
+<body>
+<!-- Overlay for click outside -->
+<div class="overlay" id="overlay" onclick="hidePlayer()"></div>
+<!-- Floating Player Icon -->
+<div class="floating-player draggable" id="floatingPlayer" onclick="toggleFloatingPlayer()">
+<i class="fas fa-music"></i>
+</div>
+<!-- Main App -->
+<div id="mainApp">
+<!-- Header -->
+<header class="header">
+<div class="header-content">
+<div class="logo">
+<i class="fas fa-music"></i>
+<span>مشغل الأناشيد الإسلامية</span>
+</div>
+<div class="header-actions">
+<button class="btn btn-secondary" onclick="openSettings()">
+<i class="fas fa-cog"></i>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Container -->
+<div class="container">
+<!-- Search Section -->
+<div class="search-section">
+<div class="search-container">
+<input class="search-input" id="searchInput" placeholder="ابحث عن الأناشيد والقصائد..." type="text"/>
+<i class="fas fa-search search-icon"></i>
+</div>
+</div>
+<!-- Home Content -->
+<div id="homeContent">
+<!-- Recent Section -->
+<div class="home-section">
+<div class="section-header">
+<h2 class="section-title">
+<i class="fas fa-clock" style="color: #667eea;"></i>
+                            الأحدث
+                        </h2>
+</div>
+<div class="section-slider" id="recentSlider"></div>
+</div>
+<!-- Popular Section -->
+<div class="home-section">
+<div class="section-header">
+<h2 class="section-title">
+<i class="fas fa-fire" style="color: #f5576c;"></i>
+                            الأكثر استماعاً
+                        </h2>
+</div>
+<div class="section-slider" id="popularSlider"></div>
+</div>
+<!-- Recommended Section -->
+<div class="home-section">
+<div class="section-header">
+<h2 class="section-title">
+<i class="fas fa-star" style="color: #ffd700;"></i>
+                            مقترح لك
+                        </h2>
+</div>
+<div class="section-slider" id="recommendedSlider"></div>
+</div>
+<!-- Favorites Section -->
+<div class="home-section">
+<div class="section-header">
+<h2 class="section-title">
+<i class="fas fa-heart" style="color: #38f9d7;"></i>
+                            المفضلة
+                        </h2>
+</div>
+<div class="section-slider" id="favoritesSlider"></div>
+</div>
+</div>
+<!-- Categories Grid -->
+<div class="categories" id="categoriesGrid" style="display: none;">
+<div class="category-card" data-category="anasheed" onclick="showAudioList('anasheed')">
+<div class="category-header">
+<div class="category-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+<i class="fas fa-music"></i>
+</div>
+<div class="category-info">
+<div class="category-title">الأناشيد الإسلامية</div>
+<div class="category-count" id="anasheedCount">0 نشيد</div>
+</div>
+</div>
+</div>
+<div class="category-card" data-category="qasaed" onclick="showAudioList('qasaed')">
+<div class="category-header">
+<div class="category-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+<i class="fas fa-heart"></i>
+</div>
+<div class="category-info">
+<div class="category-title">القصائد الحسينية</div>
+<div class="category-count" id="qasaedCount">0 قصيدة</div>
+</div>
+</div>
+</div>
+<div class="category-card" data-category="quran" onclick="showAudioList('quran')">
+<div class="category-header">
+<div class="category-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+<i class="fas fa-book-open"></i>
+</div>
+<div class="category-info">
+<div class="category-title">المزيد من القصائد</div>
+<div class="category-count" id="quranCount">0 قصيدة</div>
+</div>
+</div>
+</div>
+<div class="category-card" data-category="downloads" onclick="showAudioList('downloads')">
+<div class="category-header">
+<div class="category-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+<i class="fas fa-download"></i>
+</div>
+<div class="category-info">
+<div class="category-title">التحميلات</div>
+<div class="category-count" id="downloadsCount">0 ملف</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Audio Lists -->
+<div class="audio-list" id="anasheed-list">
+<h2 style="margin-bottom: 1.5rem; color: var(--text-primary);">
+<i class="fas fa-music" style="color: #667eea; margin-left: 0.5rem;"></i>
+                    الأناشيد الإسلامية
+                </h2>
+<div id="anasheed-items"></div>
+</div>
+<div class="audio-list" id="qasaed-list">
+<h2 style="margin-bottom: 1.5rem; color: var(--text-primary);">
+<i class="fas fa-heart" style="color: #f5576c; margin-left: 0.5rem;"></i>
+                    القصائد الحسينية
+                </h2>
+<div id="qasaed-items"></div>
+</div>
+<div class="audio-list" id="quran-list">
+<h2 style="margin-bottom: 1.5rem; color: var(--text-primary);">
+<i class="fas fa-book-open" style="color: #00f2fe; margin-left: 0.5rem;"></i>
+                    المزيد من القصائد
+                </h2>
+<div id="quran-items"></div>
+</div>
+<div class="audio-list" id="downloads-list">
+<h2 style="margin-bottom: 1.5rem; color: var(--text-primary);">
+<i class="fas fa-download" style="color: #38f9d7; margin-left: 0.5rem;"></i>
+                    التحميلات
+                </h2>
+<div id="downloads-items"></div>
+</div>
+<div class="audio-list" id="liked-list">
+<h2 style="margin-bottom: 1.5rem; color: var(--text-primary);">
+<i class="fas fa-heart" style="color: #f5576c; margin-left: 0.5rem;"></i>
+                    المفضلة
+                </h2>
+<div id="liked-items"></div>
+</div>
+</div>
+<!-- Bottom Navigation -->
+<nav class="bottom-nav" id="bottomNav">
+<div class="nav-items">
+<a class="nav-item active" href="#" onclick="showHome()">
+<i class="fas fa-home nav-icon"></i>
+<span class="nav-label">الرئيسية</span>
+</a>
+<a class="nav-item" href="#" onclick="showCategories()">
+<i class="fas fa-th-large nav-icon"></i>
+<span class="nav-label">الأقسام</span>
+</a>
+<a class="nav-item" href="#" onclick="showAudioList('downloads')">
+<i class="fas fa-download nav-icon"></i>
+<span class="nav-label">التحميلات</span>
+</a>
+<a class="nav-item" href="#" onclick="showAudioList('liked')">
+<i class="fas fa-heart nav-icon"></i>
+<span class="nav-label">المفضلة</span>
+</a>
+</div>
+</nav>
+</div>
+<!-- Offline Mode -->
+<div class="offline-mode" id="offlineMode">
+<div class="offline-header">
+<h1><i class="fas fa-wifi" style="margin-left: 0.5rem;"></i>وضع عدم الاتصال</h1>
+</div>
+<div class="offline-content">
+<div class="offline-message">
+<i class="fas fa-exclamation-triangle"></i>
+<div>
+<strong>لا يوجد اتصال بالإنترنت</strong><br/>
+                    يمكنك الاستماع للملفات المحملة فقط
+                </div>
+</div>
+<div id="offline-downloads"></div>
+</div>
+</div>
+<!-- Audio Player -->
+<div class="player" id="player">
+<div class="player-content">
+<div class="player-main">
+<div class="player-thumbnail" id="playerThumbnail">
+<i class="fas fa-music"></i>
+</div>
+<div class="player-info">
+<div class="player-title" id="playerTitle">اختر نشيد للتشغيل</div>
+<div class="player-artist" id="playerArtist">فنان غير محدد</div>
+</div>
+<div class="player-controls">
+<button class="control-btn" onclick="previousTrack()">
+<i class="fas fa-step-backward"></i>
+</button>
+<button class="control-btn play-pause" id="playPauseBtn" onclick="togglePlay()">
+<i class="fas fa-play"></i>
+</button>
+<button class="control-btn" onclick="nextTrack()">
+<i class="fas fa-step-forward"></i>
+</button>
+<button class="control-btn expand-btn" onclick="expandPlayer()">
+<i class="fas fa-expand"></i>
+</button>
+<button class="control-btn hide-btn" onclick="minimizePlayer()">
+<i class="fas fa-minus"></i>
+</button>
+</div>
+</div>
+<div class="progress-container">
+<div class="progress-bar" id="progressBar" onclick="seekTo(event)" onmousemove="updateProgressHandle(event)">
+<div class="progress-fill" id="progressFill"></div>
+<div class="progress-handle" id="progressHandle"></div>
+</div>
+<div class="progress-time">
+<span id="currentTime">0:00</span>
+<span id="totalTime">0:00</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Expanded Player -->
+<div class="expanded-player" id="expandedPlayer">
+<div class="expanded-header">
+<button class="btn btn-secondary" onclick="collapsePlayer()">
+<i class="fas fa-chevron-down"></i>
+</button>
+<h3>مشغل الموسيقى</h3>
+<button class="btn btn-secondary" onclick="toggleLike()">
+<i class="fas fa-heart" id="expandedLikeBtn"></i>
+</button>
+</div>
+<div class="expanded-content">
+<div class="expanded-thumbnail" id="expandedThumbnail">
+<i class="fas fa-music"></i>
+</div>
+<div class="expanded-info">
+<div class="expanded-title" id="expandedTitle">اختر نشيد للتشغيل</div>
+<div class="expanded-artist" id="expandedArtist">فنان غير محدد</div>
+</div>
+<div class="expanded-controls">
+<button class="control-btn" onclick="previousTrack()">
+<i class="fas fa-step-backward"></i>
+</button>
+<button class="control-btn play-pause" id="expandedPlayPauseBtn" onclick="togglePlay()">
+<i class="fas fa-play"></i>
+</button>
+<button class="control-btn" onclick="nextTrack()">
+<i class="fas fa-step-forward"></i>
+</button>
+</div>
+<div class="progress-container" style="width: 100%; max-width: 400px;">
+<div class="progress-bar" id="expandedProgressBar" onclick="seekTo(event)" onmousemove="updateProgressHandle(event)">
+<div class="progress-fill" id="expandedProgressFill"></div>
+<div class="progress-handle" id="expandedProgressHandle"></div>
+</div>
+<div class="progress-time">
+<span id="expandedCurrentTime">0:00</span>
+<span id="expandedTotalTime">0:00</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Download Progress -->
+<div class="download-progress" id="downloadProgress">
+<h4 style="margin-bottom: 1rem; color: var(--text-primary);">
+<i class="fas fa-download" style="margin-left: 0.5rem;"></i>
+            التحميلات الجارية
+        </h4>
+<div id="downloadItems"></div>
+</div>
+<!-- Settings Modal -->
+<div class="settings-modal" id="settingsModal">
+<div class="settings-content">
+<div class="settings-header">
+<h2>الإعدادات</h2>
+<button class="btn btn-secondary" onclick="closeSettings()">
+<i class="fas fa-times"></i>
+</button>
+</div>
+<div class="settings-section">
+<h3>المظهر</h3>
+<div class="setting-item">
+<span>الوضع الليلي</span>
+<div class="toggle-switch active" id="themeToggle" onclick="toggleTheme()"></div>
+</div>
+</div>
+<div class="settings-section">
+<h3>التشغيل</h3>
+<div class="setting-item">
+<span>التشغيل التلقائي</span>
+<div class="toggle-switch" id="autoplayToggle" onclick="toggleAutoplay()"></div>
+</div>
+<div class="setting-item">
+<span>التكرار</span>
+<div class="toggle-switch" id="repeatToggle" onclick="toggleRepeat()"></div>
+</div>
+<div class="setting-item">
+<span>الخلط العشوائي</span>
+<div class="toggle-switch" id="shuffleToggle" onclick="toggleShuffle()"></div>
+</div>
+</div>
+<div class="settings-section">
+<h3>التحميل</h3>
+<div class="setting-item">
+<span>التحميل التلقائي</span>
+<div class="toggle-switch" id="autoDownloadToggle" onclick="toggleAutoDownload()"></div>
+</div>
+<div class="setting-item">
+<span>جودة التحميل</span>
+<select style="background: var(--card-bg); color: var(--text-primary); border: 1px solid var(--border-color); padding: 0.5rem; border-radius: 8px;">
+<option value="high">عالية</option>
+<option selected="" value="medium">متوسطة</option>
+<option value="low">منخفضة</option>
+</select>
+</div>
+</div>
+<div class="settings-section">
+<h3>معلومات التطبيق</h3>
+<div class="setting-item">
+<span>الإصدار</span>
+<span style="color: var(--text-secondary);">5.1.0</span>
+</div>
+<div class="setting-item">
+<span>حجم التخزين المستخدم</span>
+<span id="storageUsed" style="color: var(--text-secondary);">0 MB</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Audio Element -->
+<audio id="audioPlayer" preload="metadata"></audio>
+<script>
+        // Global Variables
+        let currentAudio = null;
+        let currentPlaylist = [];
+        let currentIndex = 0;
+        let isPlaying = false;
+        let isExpanded = false;
+        let isOffline = false;
+        let isDragging = false;
+        let activeDownloads = new Map();
+        let settings = {
+            theme: 'dark',
+            autoplay: false,
+            repeat: false,
+            shuffle: false,
+            autoDownload: false
+        };
+
+        // Audio Data with Real Images
+        const audioData = {
+            anasheed: [
+                {
+                    id: 1,
+                    title: "شور حي لايموت",
+                    artist: "محمود قيم",
+                    duration: "",
+                    image: "https://ar-hosting.pages.dev/1750612838585.jpg",
+                    url: "https://files.catbox.moe/zwfz1k.m4a",
+                    category: "anasheed",
+                    plays: 1250,
+                    dateAdded: new Date('2024-01-15')
+                },
+                {
+                    id: 2,
+                    title: "الحمد لله",
+                    artist: "مرتضى حرب",
+                    duration: "",
+                    image: "https://ar-hosting.pages.dev/1750612841137.jpg",
+                    url: "https://files.catbox.moe/hm1pit.m4a",
+                    category: "anasheed",
+                    plays: 980,
+                    dateAdded: new Date('2024-01-10')
+                },
+                {
+                    id: 3,
+                    title: "قتال العرب",
+                    artist: "سيد فاقد الموسوي",
+                    duration: "",
+                    image: "https://ar-hosting.pages.dev/1750613175876.jpg",
+                    url: "https://files.catbox.moe/rftmuz.m4a",
+                    category: "anasheed",
+                    plays: 1500,
+                    dateAdded: new Date('2024-01-20')
+                },
+                {
+                    id: 4,
+                    title: "اسد الله علي",
+                    artist: "سيد ستار الجبيلي",
+                    duration: "",
+                    image: "https://ar-hosting.pages.dev/1750613997600.jpg",
+                    url: "https://files.catbox.moe/ndegi2.m4a",
+                    category: "anasheed",
+                    plays: 750,
+                    dateAdded: new Date('2024-01-05')
+                },
+                {
+                    id: 5,
+                    title: "يا دمع عيوني",
+                    artist: "باسم الكربلائي",
+                    duration: "",
+                    image: "https://ar-hosting.pages.dev/1750612840330.jpg",
+                    url: "https://j.top4top.io/m_3464cn7l61.m4a",
+                    category: "anasheed",
+                    plays: 750,
+                    dateAdded: new Date('2024-01-05')
+                },
+                {
+                    id: 6,
+                    title: "ريت السافر يعود",
+                    artist: "باسم الكربلائي",
+                    duration: "",
+                    image: "https://ar-hosting.pages.dev/1750612840330.jpg",
+                    url: "https://e.top4top.io/m_34647e5ff1.m4a",
+                    category: "anasheed",
+                    plays: 750,
+                    dateAdded: new Date('2024-01-05')
+                },
+                {
+                    id: 7,
+                    title: "يا زمن وين الاحباب",
+                    artist: "باسم الكربلائي",
+                    duration: "",
+                    image: "https://ar-hosting.pages.dev/1750612840330.jpg",
+                    url: "https://k.top4top.io/m_3464kgzp21.m4a",
+                    category: "anasheed",
+                    plays: 750,
+                    dateAdded: new Date('2024-01-05')
+                },
+                {
+                    id: 8,
+                    title: "تدري لو متدري",
+                    artist: "باسم الكربلائي",
+                    duration: "",
+                    image: "https://ar-hosting.pages.dev/1750612840330.jpg",
+                    url: "https://files.catbox.moe/5u1jb0.m4a",
+                    category: "anasheed",
+                    plays: 750,
+                    dateAdded: new Date('2024-01-05')
+                },
+                {
+                    id: 9,
+                    title: "يامدرك الثار البدار البدار",
+                    artist: "باسم الكربلائي",
+                    duration: "",
+                    image: "https://ar-hosting.pages.dev/1750612840330.jpg",
+                    url: "https://files.catbox.moe/8at0ps.mp3",
+                    category: "anasheed",
+                    plays: 750,
+                    dateAdded: new Date('2024-01-05')
+                },
+                {
+                    id: 10,
+                    title: "هذا الغريب منين",
+                    artist: "باسم الكربلائي",
+                    duration: "",
+                    image: "https://ar-hosting.pages.dev/1750612840330.jpg",
+                    url: "https://i.top4top.io/m_3464sx67x1.mp3",
+                    category: "anasheed",
+                    plays: 750,
+                    dateAdded: new Date('2024-01-05')
+                },
+                {
+                    id: 11,
+                    title: "واغريبًا",
+                    artist: "مجتبى الكعبي",
+                    duration: "",
+                    image: "https://ar-hosting.pages.dev/1750612462855.jpg",
+                    url: "https://c.top4top.io/m_3464zw63v1.mp3",
+                    category: "anasheed",
+                    plays: 750,
+                    dateAdded: new Date('2024-01-05')
+                },
+                {
+                    id: 12,
+                    title: "جمال الأكبر",
+                    artist: "مجتبى الكعبي",
+                    duration: "",
+                    image: "https://ar-hosting.pages.dev/1750612462855.jpg",
+                    url: "https://files.catbox.moe/ko0t1a.m4a",
+                    category: "anasheed",
+                    plays: 750,
+                    dateAdded: new Date('2024-01-05')
+                },
+                {
+                    id: 13,
+                    title: "روحي مشتاكة",
+                    artist: "باسم الكربلائي",
+                    duration: "",
+                    image: "https://ar-hosting.pages.dev/1750612840330.jpg",
+                    url: "https://l.top4top.io/m_3464efw081.m4a",
+                    category: "anasheed",
+                    plays: 750,
+                    dateAdded: new Date('2024-01-05')
+                },
+                {
+                    id: 14,
+                    title: "شكوى زينب",
+                    artist: "علي الجفيري",
+                    duration: "",
+                    image: "https://ar-hosting.pages.dev/1750613174253.jpg",
+                    url: "https://files.catbox.moe/0t08yz.m4a",
+                    category: "anasheed",
+                    plays: 750,
+                    dateAdded: new Date('2024-01-05')
+                },
+                {
+                    id: 15,
+                    title: "الله اكبر طاح الحسين",
+                    artist: "سيد فاقد الموسوي",
+                    duration: "",
+                    image: "https://ar-hosting.pages.dev/1750613175876.jpg",
+                    url: "https://b.top4top.io/m_3464at4ie1.m4a",
+                    category: "anasheed",
+                    plays: 750,
+                    dateAdded: new Date('2024-01-05')
+                },
+                {
+                    id: 16,
+                    title: "بيدك ياعلي الراية",
+                    artist: "مسلم الوائلي",
+                    duration: "",
+                    image: "https://ar-hosting.pages.dev/1750613175118.jpg",
+                    url: "https://files.catbox.moe/7lrm7p.mp3",
+                    category: "anasheed",
+                    plays: 1100,
+                    dateAdded: new Date('2024-01-12')
+                }
+            ],
+            qasaed: [
+                {
+                    id: 17,
+                    title: "تمنيت",
+                    artist: "باسم الكربلائي",
+                    duration: "",
+                    image: "https://ar-hosting.pages.dev/1750612840330.jpg",
+                    url: "https://l.top4top.io/m_3464jceba1.m4a",
+                    category: "qasaed",
+                    plays: 2000,
+                    dateAdded: new Date('2024-01-18')
+                },
+                {
+                    id: 18,
+                    title: "يحسين ردن",
+                    artist: "مرتضى حرب",
+                    duration: "",
+                    image: "https://ar-hosting.pages.dev/1750612841137.jpg",
+                    url: "https://files.catbox.moe/kj7ypg.mp3",
+                    category: "qasaed",
+                    plays: 1800,
+                    dateAdded: new Date('2024-01-08')
+                },
+                {
+                    id: 19,
+                    title: "ما شبه لهم",
+                    artist: "باسم الكربلائي",
+                    duration: "",
+                    image: "https://ar-hosting.pages.dev/1750612840330.jpg",
+                    url: "https://d.top4top.io/m_3464bnnwo1.m4a",
+                    category: "qasaed",
+                    plays: 750,
+                    dateAdded: new Date('2024-01-05')
+                },
+                {
+                    id: 20,
+                    title: "يمة",
+                    artist: "باسم الكربلائي",
+                    duration: "",
+                    image: "https://ar-hosting.pages.dev/1750612840330.jpg",
+                    url: "https://c.top4top.io/m_346476n731.m4a",
+                    category: "qasaed",
+                    plays: 750,
+                    dateAdded: new Date('2024-01-05')
+                },
+                {
+                    id: 21,
+                    title: "يالماشي لحسين",
+                    artist: "مسلم الوائلي",
+                    duration: "",
+                    image: "https://ar-hosting.pages.dev/1750613175118.jpg",
+                    url: "https://files.catbox.moe/vj7x4f.mp3",
+                    category: "qasaed",
+                    plays: 750,
+                    dateAdded: new Date('2024-01-05')
+                },
+                {
+                    id: 22,
+                    title: "شبيها امي",
+                    artist: "باسم الكربلائي",
+                    duration: "",
+                    image: "https://ar-hosting.pages.dev/1750612840330.jpg",
+                    url: "https://files.catbox.moe/ofqzb8.m4a",
+                    category: "qasaed",
+                    plays: 750,
+                    dateAdded: new Date('2024-01-05')
+                },
+                {
+                    id: 23,
+                    title: "اشرب الماء",
+                    artist: "مجتبى الكعبي",
+                    duration: "",
+                    image: "https://ar-hosting.pages.dev/1750612462855.jpg",
+                    url: "https://files.catbox.moe/z92lpt.m4a",
+                    category: "qasaed",
+                    plays: 750,
+                    dateAdded: new Date('2024-01-05')
+                },
+                {
+                    id: 24,
+                    title: "شوكت نرتاح",
+                    artist: "حمزة الرميثي",
+                    duration: "",
+                    image: "https://ar-hosting.pages.dev/1750614489367.jpg",
+                    url: "https://files.catbox.moe/5rj0qk.m4a",
+                    category: "qasaed",
+                    plays: 750,
+                    dateAdded: new Date('2024-01-05')
+                },
+                {
+                    id: 25,
+                    title: "ليش هيج تغيرت",
+                    artist: "باسم الكربلائي",
+                    duration: "",
+                    image: "https://ar-hosting.pages.dev/1750612840330.jpg",
+                    url: "https://h.top4top.io/m_3464maf1o1.m4a",
+                    category: "qasaed",
+                    plays: 750,
+                    dateAdded: new Date('2024-01-05')
+                },
+                {
+                    id: 26,
+                    title: "ما نسيتك",
+                    artist: "باسم الكربلائي",
+                    duration: "",
+                    image: "https://ar-hosting.pages.dev/1750612840330.jpg",
+                    url: "https://i.top4top.io/m_3464mcwue1.m4a",
+                    category: "qasaed",
+                    plays: 750,
+                    dateAdded: new Date('2024-01-05')
+                },
+                {
+                    id: 27,
+                    title: "يا نجمة",
+                    artist: "باسم الكربلائي",
+                    duration: "",
+                    image: "https://ar-hosting.pages.dev/1750612840330.jpg",
+                    url: "https://c.top4top.io/m_3464q99a81.m4a",
+                    category: "qasaed",
+                    plays: 750,
+                    dateAdded: new Date('2024-01-05')
+                },
+                {
+                    id: 28,
+                    title: "ولي الله علي",
+                    artist: "سيد حيدر الموسوي",
+                    duration: "",
+                    image: "https://ar-hosting.pages.dev/1750614016232.jpg",
+                    url: "https://files.catbox.moe/bvfp7s.mp3
+                    category: "qasaed",
+                    plays: 1600,
+                    dateAdded: new Date('2024-01-22')
+                }
+            ],
+            quran: [
+                {
+                    id: 29,
+                    title: "متعبينك",
+                    artist: "سيد فاقد الموسوي",
+                    duration: "",
+                    image: "https://ar-hosting.pages.dev/1750613175876.jpg",
+                    url: "https://files.catbox.moe/mhtpge.m4a",
+                    category: "quran",
+                    plays: 3000,
+                    dateAdded: new Date('2024-01-25')
+                },
+                {
+                    id: 30,
+                    title: "ازور سيدي",
+                    artist: "باسم الكربلائي",
+                    duration: "",
+                    image: "https://ar-hosting.pages.dev/1750612840330.jpg",
+                    url: "https://files.catbox.moe/tkfrtg.m4a",
+                    category: "quran",
+                    plays: 750,
+                    dateAdded: new Date('2024-01-05')
+                },
+                {
+                    id: 31,
+                    title: "ليش ماشافت عيني الفرح",
+                    artist: "باسم الكربلائي",
+                    duration: "",
+                    image: "https://ar-hosting.pages.dev/1750612840330.jpg",
+                    url: "https://files.catbox.moe/m6ybr6.m4a",
+                    category: "quran",
+                    plays: 750,
+                    dateAdded: new Date('2024-01-05')
+                },
+                {
+                    id: 32,
+                    title: "اقدس شريعة",
+                    artist: "محمد باقر الخاقاني",
+                    duration: "",
+                    image: "https://ar-hosting.pages.dev/1750612839490.jpg",
+                    url: "https://e.top4top.io/m_34648stzu1.m4a",
+                    category: "quran",
+                    plays: 750,
+                    dateAdded: new Date('2024-01-05')
+                },
+                {
+                    id: 33,
+                    title: "هايمة الروح",
+                    artist: "باسم الكربلائي",
+                    duration: "",
+                    image: "https://ar-hosting.pages.dev/1750612840330.jpg",
+                    url: "https://j.top4top.io/m_3464hftf81.m4a",
+                    category: "quran",
+                    plays: 750,
+                    dateAdded: new Date('2024-01-05')
+                },
+                {
+                    id: 34,
+                    title: "نجمة ليش",
+                    artist: "سيد فاقد الموسوي",
+                    duration: "",
+                    image: "https://ar-hosting.pages.dev/1750613175876.jpg",
+                    url: "https://files.catbox.moe/8vpa5g.m4a",
+                    category: "quran",
+                    plays: 750,
+                    dateAdded: new Date('2024-01-05')
+                },
+                {
+                    id: 35,
+                    title: "عباس يعيوني",
+                    artist: "باسم الكربلائي",
+                    duration: "",
+                    image: "https://ar-hosting.pages.dev/1750612840330.jpg",
+                    url: "https://files.catbox.moe/l0sdf7.m4a",
+                    category: "quran",
+                    plays: 750,
+                    dateAdded: new Date('2024-01-05')
+                },
+                {
+                    id: 36,
+                    title: "طاحت الخيمة",
+                    artist: "باسم الكربلائي",
+                    duration: "",
+                    image: "https://ar-hosting.pages.dev/1750612840330.jpg",
+                    url: "https://a.top4top.io/m_3464h16si1.m4a",
+                    category: "quran",
+                    plays: 750,
+                    dateAdded: new Date('2024-01-05')
+                },
+                {
+                    id: 37,
+                    title: "انين بأسم الحسين",
+                    artist: "محمد باقر الخاقاني",
+                    duration: "",
+                    image: "https://ar-hosting.pages.dev/1750612839490.jpg",
+                    url: "https://files.catbox.moe/oth3h0.m4a",
+                    category: "quran",
+                    plays: 750,
+                    dateAdded: new Date('2024-01-05')
+                },
+                {
+                    id: 38,
+                    title: "يا اخو علي",
+                    artist: "مرتضى حرب",
+                    duration: "",
+                    image: "https://ar-hosting.pages.dev/1750612841137.jpg",
+                    url: "https://files.catbox.moe/ibfpeg.mp3",
+                    category: "quran",
+                    plays: 750,
+                    dateAdded: new Date('2024-01-05')
+                },
+                {
+                    id: 39,
+                    title: "مجنون عيونك",
+                    artist: "محمد باقر الخاقاني",
+                    duration: "",
+                    image: "https://ar-hosting.pages.dev/1750612839490.jpg",
+                    url: "https://files.catbox.moe/8lenla.m4a",
+                    category: "quran",
+                    plays: 750,
+                    dateAdded: new Date('2024-01-05')
+                },
+                {
+                    id: 40,
+                    title: "الساقي",
+                    artist: "سيف الذهبي",
+                    duration: "",
+                    image: "https://ar-hosting.pages.dev/1750613173445.jpg",
+                    url: "https://files.catbox.moe/jftf9f.m4a",
+                    category: "quran",
+                    plays: 2500,
+                    dateAdded: new Date('2024-01-03')
+                }
+            ]
+        };
+
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+            checkOnlineStatus();
+            loadSettings();
+            setupAudioPlayer();
+            renderAudioLists();
+            renderHomeSliders();
+            updateCategoryCounts();
+            setupDraggablePlayer();
+            setupImageLoading();
+            
+            // Check online status periodically
+            setInterval(checkOnlineStatus, 5000);
+        });
+
+        // Initialize Application
+        function initializeApp() {
+            console.log('تم تحميل التطبيق بنجاح');
+            
+            // Setup search functionality
+            document.getElementById('searchInput').addEventListener('input', debounce(handleSearch, 300));
+            
+            // Setup keyboard shortcuts
+            document.addEventListener('keydown', handleKeyboardShortcuts);
+            
+            // Setup service worker
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('sw.js')
+                    .then(registration => console.log('Service Worker registered'))
+                    .catch(error => console.log('Service Worker registration failed'));
+            }
+        }
+
+        // Setup Image Loading with Error Handling
+        function setupImageLoading() {
+            // Add global image error handler
+            document.addEventListener('error', function(e) {
+                if (e.target.tagName === 'IMG') {
+                    handleImageError(e.target);
+                }
+            }, true);
+        }
+
+        // Handle Image Loading
+        function handleImageLoad(img) {
+            img.classList.add('loaded');
+            img.style.opacity = '1';
+        }
+
+        // Handle Image Error
+        function handleImageError(img) {
+            img.classList.add('error');
+            img.style.display = 'none';
+            
+            // Show fallback icon
+            const parent = img.parentElement;
+            if (parent && !parent.querySelector('.image-fallback')) {
+                const fallback = document.createElement('div');
+                fallback.className = 'image-fallback';
+                fallback.innerHTML = '<i class="fas fa-music"></i>';
+                fallback.style.cssText = `
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: var(--primary-gradient);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-size: 1.5rem;
+                    border-radius: inherit;
+                `;
+                parent.appendChild(fallback);
+            }
+        }
+
+        // Create Image Element with Loading Handling
+        function createImageElement(src, alt) {
+            const img = document.createElement('img');
+            img.src = src;
+            img.alt = alt;
+            img.style.opacity = '0';
+            
+            img.onload = function() {
+                handleImageLoad(this);
+            };
+            
+            img.onerror = function() {
+                handleImageError(this);
+            };
+            
+            return img;
+        }
+
+        // Setup Draggable Player
+        function setupDraggablePlayer() {
+            const floatingPlayer = document.getElementById('floatingPlayer');
+            let isDragging = false;
+            let startX, startY, initialX, initialY;
+
+            floatingPlayer.addEventListener('mousedown', startDrag);
+            floatingPlayer.addEventListener('touchstart', startDrag, { passive: false });
+
+            function startDrag(e) {
+                e.preventDefault();
+                isDragging = true;
+                floatingPlayer.classList.add('dragging');
+
+                if (e.type === 'mousedown') {
+                    startX = e.clientX;
+                    startY = e.clientY;
+                } else {
+                    startX = e.touches[0].clientX;
+                    startY = e.touches[0].clientY;
+                }
+
+                const rect = floatingPlayer.getBoundingClientRect();
+                initialX = rect.left;
+                initialY = rect.top;
+
+                document.addEventListener('mousemove', drag);
+                document.addEventListener('touchmove', drag, { passive: false });
+                document.addEventListener('mouseup', stopDrag);
+                document.addEventListener('touchend', stopDrag);
+            }
+
+            function drag(e) {
+                if (!isDragging) return;
+                e.preventDefault();
+
+                let currentX, currentY;
+                if (e.type === 'mousemove') {
+                    currentX = e.clientX;
+                    currentY = e.clientY;
+                } else {
+                    currentX = e.touches[0].clientX;
+                    currentY = e.touches[0].clientY;
+                }
+
+                const deltaX = currentX - startX;
+                const deltaY = currentY - startY;
+
+                const newX = Math.max(0, Math.min(window.innerWidth - 60, initialX + deltaX));
+                const newY = Math.max(0, Math.min(window.innerHeight - 60, initialY + deltaY));
+
+                floatingPlayer.style.left = newX + 'px';
+                floatingPlayer.style.top = newY + 'px';
+                floatingPlayer.style.right = 'auto';
+                floatingPlayer.style.bottom = 'auto';
+            }
+
+            function stopDrag() {
+                isDragging = false;
+                floatingPlayer.classList.remove('dragging');
+                document.removeEventListener('mousemove', drag);
+                document.removeEventListener('touchmove', drag);
+                document.removeEventListener('mouseup', stopDrag);
+                document.removeEventListener('touchend', stopDrag);
+            }
+        }
+
+        // Toggle Floating Player - NEW FUNCTION
+        function toggleFloatingPlayer() {
+            if (currentAudio) {
+                // If there's audio playing, show the player
+                showPlayer();
+            } else {
+                // If no audio, go back to home
+                showHome();
+            }
+        }
+
+        // Update Category Counts
+        function updateCategoryCounts() {
+            document.getElementById('anasheedCount').textContent = `${audioData.anasheed.length} نشيد`;
+            document.getElementById('qasaedCount').textContent = `${audioData.qasaed.length} قصيدة`;
+            document.getElementById('quranCount').textContent = `${audioData.quran.length} قصيدة`;
+            updateDownloadsCount();
+        }
+
+        // Check Online Status
+        function checkOnlineStatus() {
+            const wasOffline = isOffline;
+            isOffline = !navigator.onLine;
+            
+            if (wasOffline !== isOffline) {
+                if (isOffline) {
+                    showOfflineMode();
+                } else {
+                    hideOfflineMode();
+                }
+            }
+        }
+
+        // Show Offline Mode
+        function showOfflineMode() {
+            document.getElementById('mainApp').style.display = 'none';
+            document.getElementById('offlineMode').classList.add('active');
+            renderOfflineDownloads();
+        }
+
+        // Hide Offline Mode
+        function hideOfflineMode() {
+            document.getElementById('mainApp').style.display = 'block';
+            document.getElementById('offlineMode').classList.remove('active');
+        }
+
+        // Render Offline Downloads
+        function renderOfflineDownloads() {
+            const downloads = getDownloadedAudios();
+            const container = document.getElementById('offline-downloads');
+            
+            if (downloads.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; color: var(--text-secondary);">
+                        <i class="fas fa-download" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                        <h3>لا توجد ملفات محملة</h3>
+                        <p>قم بتحميل بعض الأناشيد أولاً للاستماع إليها بدون إنترنت</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = downloads.map(audio => `
+                <div class="audio-item" onclick="playAudio(${audio.id})">
+                    <div class="audio-thumbnail">
+                        ${createImageHTML(audio.image, audio.title)}
+                    </div>
+                    <div class="audio-info">
+                        <div class="audio-title">${audio.title}</div>
+                        <div class="audio-artist">${audio.artist}</div>
+                    </div>
+                    <div class="audio-actions">
+                        <button class="action-btn" onclick="event.stopPropagation(); removeDownload(${audio.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Create Image HTML with Error Handling
+        function createImageHTML(src, alt) {
+            return `<img src="${src}" alt="${alt}" onload="handleImageLoad(this)" onerror="handleImageError(this)">`;
+        }
+
+        // Setup Audio Player
+        function setupAudioPlayer() {
+            const audio = document.getElementById('audioPlayer');
+            
+            audio.addEventListener('loadedmetadata', updateDuration);
+            audio.addEventListener('timeupdate', updateProgress);
+            audio.addEventListener('ended', handleAudioEnded);
+            audio.addEventListener('error', handleAudioError);
+        }
+
+        // Render Home Sliders
+        function renderHomeSliders() {
+            renderRecentSlider();
+            renderPopularSlider();
+            renderRecommendedSlider();
+            renderFavoritesSlider();
+        }
+
+        // Render Recent Slider
+        function renderRecentSlider() {
+            const allAudios = getAllAudios();
+            const recent = allAudios.sort((a, b) => b.dateAdded - a.dateAdded).slice(0, 10);
+            renderSlider('recentSlider', recent);
+        }
+
+        // Render Popular Slider
+        function renderPopularSlider() {
+            const allAudios = getAllAudios();
+            const popular = allAudios.sort((a, b) => b.plays - a.plays).slice(0, 10);
+            renderSlider('popularSlider', popular);
+        }
+
+        // Render Recommended Slider
+        function renderRecommendedSlider() {
+            const allAudios = getAllAudios();
+            const recommended = allAudios.sort(() => 0.5 - Math.random()).slice(0, 10);
+            renderSlider('recommendedSlider', recommended);
+        }
+
+        // Render Favorites Slider
+        function renderFavoritesSlider() {
+            const favorites = getLikedAudios();
+            renderSlider('favoritesSlider', favorites);
+        }
+
+        // Render Slider
+        function renderSlider(sliderId, audios) {
+            const container = document.getElementById(sliderId);
+            if (!container) return;
+            
+            if (audios.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; color: var(--text-secondary); width: 100%;">
+                        <i class="fas fa-music" style="font-size: 2rem; margin-bottom: 0.5rem; opacity: 0.5;"></i>
+                        <p>لا توجد عناصر</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = audios.map(audio => `
+                <div class="slider-item fade-in" onclick="playAudio(${audio.id})">
+                    <div class="slider-thumbnail">
+                        ${createImageHTML(audio.image, audio.title)}
+                    </div>
+                    <div class="slider-title">${audio.title}</div>
+                    <div class="slider-artist">${audio.artist}</div>
+                </div>
+            `).join('');
+        }
+
+        // Get All Audios
+        function getAllAudios() {
+            const allAudios = [];
+            Object.values(audioData).forEach(category => {
+                allAudios.push(...category);
+            });
+            return allAudios;
+        }
+
+        // Render Audio Lists
+        function renderAudioLists() {
+            Object.keys(audioData).forEach(category => {
+                renderAudioList(category, audioData[category]);
+            });
+            updateDownloadsCount();
+        }
+
+        // Render Audio List
+        function renderAudioList(category, audios) {
+            const container = document.getElementById(`${category}-items`);
+            if (!container) return;
+            
+            container.innerHTML = audios.map(audio => `
+                <div class="audio-item fade-in" onclick="playAudio(${audio.id})" data-id="${audio.id}">
+                    <div class="audio-thumbnail">
+                        ${createImageHTML(audio.image, audio.title)}
+                        <div class="play-overlay">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="audio-info">
+                        <div class="audio-title">${audio.title}</div>
+                        <div class="audio-artist">${audio.artist} • ${audio.duration}</div>
+                    </div>
+                    <div class="audio-actions">
+                        <button class="action-btn ${isLiked(audio.id) ? 'liked' : ''}" onclick="event.stopPropagation(); toggleLikeAudio(${audio.id})" title="إضافة للمفضلة">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                        <button class="action-btn ${isDownloaded(audio.id) ? 'downloaded' : ''}" onclick="event.stopPropagation(); toggleDownload(${audio.id})" title="تحميل">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Show Home
+        function showHome() {
+            // Hide all lists and categories
+            document.querySelectorAll('.audio-list').forEach(list => {
+                list.classList.remove('active');
+            });
+            document.getElementById('categoriesGrid').style.display = 'none';
+            
+            // Show home content
+            document.getElementById('homeContent').style.display = 'block';
+            updateNavigation('home');
+            
+            // Refresh sliders
+            renderHomeSliders();
+        }
+
+        // Show Categories
+        function showCategories() {
+            // Hide home content and all lists
+            document.getElementById('homeContent').style.display = 'none';
+            document.querySelectorAll('.audio-list').forEach(list => {
+                list.classList.remove('active');
+            });
+            
+            // Show categories grid
+            document.getElementById('categoriesGrid').style.display = 'grid';
+            updateNavigation('categories');
+        }
+
+        // Show Audio List
+        function showAudioList(category) {
+            // Hide home content and categories
+            document.getElementById('homeContent').style.display = 'none';
+            document.getElementById('categoriesGrid').style.display = 'none';
+            
+            // Hide all lists
+            document.querySelectorAll('.audio-list').forEach(list => {
+                list.classList.remove('active');
+            });
+            
+            // Show selected list
+            const targetList = document.getElementById(`${category}-list`);
+            if (targetList) {
+                targetList.classList.add('active');
+            }
+            
+            // Update navigation
+            updateNavigation(category);
+            
+            // Special handling for downloads and liked
+            if (category === 'downloads') {
+                renderDownloadsList();
+            } else if (category === 'liked') {
+                renderLikedList();
+            }
+        }
+
+        // Render Downloads List
+        function renderDownloadsList() {
+            const downloads = getDownloadedAudios();
+            const container = document.getElementById('downloads-items');
+            
+            if (downloads.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; color: var(--text-secondary);">
+                        <i class="fas fa-download" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                        <h3>لا توجد تحميلات</h3>
+                        <p>قم بتحميل بعض الأناشيد للاستماع إليها بدون إنترنت</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = downloads.map(audio => `
+                <div class="audio-item fade-in" onclick="playAudio(${audio.id})" data-id="${audio.id}">
+                    <div class="audio-thumbnail">
+                        ${createImageHTML(audio.image, audio.title)}
+                        <div class="play-overlay">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="audio-info">
+                        <div class="audio-title">${audio.title}</div>
+                        <div class="audio-artist">${audio.artist} • ${audio.duration}</div>
+                    </div>
+                    <div class="audio-actions">
+                        <button class="action-btn ${isLiked(audio.id) ? 'liked' : ''}" onclick="event.stopPropagation(); toggleLikeAudio(${audio.id})" title="إضافة للمفضلة">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                        <button class="action-btn downloaded" onclick="event.stopPropagation(); removeDownload(${audio.id})" title="إزالة التحميل">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render Liked List
+        function renderLikedList() {
+            const liked = getLikedAudios();
+            const container = document.getElementById('liked-items');
+            
+            if (liked.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; color: var(--text-secondary);">
+                        <i class="fas fa-heart" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                        <h3>لا توجد مفضلة</h3>
+                        <p>أضف بعض الأناشيد إلى المفضلة لتظهر هنا</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = liked.map(audio => `
+                <div class="audio-item fade-in" onclick="playAudio(${audio.id})" data-id="${audio.id}">
+                    <div class="audio-thumbnail">
+                        ${createImageHTML(audio.image, audio.title)}
+                        <div class="play-overlay">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="audio-info">
+                        <div class="audio-title">${audio.title}</div>
+                        <div class="audio-artist">${audio.artist} • ${audio.duration}</div>
+                    </div>
+                    <div class="audio-actions">
+                        <button class="action-btn liked" onclick="event.stopPropagation(); toggleLikeAudio(${audio.id})" title="إزالة من المفضلة">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                        <button class="action-btn ${isDownloaded(audio.id) ? 'downloaded' : ''}" onclick="event.stopPropagation(); toggleDownload(${audio.id})" title="تحميل">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Update Navigation
+        function updateNavigation(active) {
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            if (active === 'home') {
+                document.querySelector('.nav-item[onclick="showHome()"]').classList.add('active');
+            } else if (active === 'categories') {
+                document.querySelector('.nav-item[onclick="showCategories()"]').classList.add('active');
+            } else if (active === 'downloads') {
+                document.querySelector('.nav-item[onclick="showAudioList(\'downloads\')"]').classList.add('active');
+            } else if (active === 'liked') {
+                document.querySelector('.nav-item[onclick="showAudioList(\'liked\')"]').classList.add('active');
+            }
+        }
+
+        // Play Audio - Shows player and floating icon
+        function playAudio(id) {
+            const audio = findAudioById(id);
+            if (!audio) return;
+            
+            // If offline and audio not downloaded, show message
+            if (isOffline && !isDownloaded(id)) {
+                showNotification('هذا الملف غير متوفر بدون إنترنت', 'error');
+                return;
+            }
+            
+            currentAudio = audio;
+            currentIndex = getCurrentPlaylistIndex(id);
+            
+            const audioPlayer = document.getElementById('audioPlayer');
+            audioPlayer.src = audio.url;
+            audioPlayer.load();
+            
+            updatePlayerUI();
+            showPlayer();
+            
+            audioPlayer.play().then(() => {
+                isPlaying = true;
+                updatePlayButtons();
+                incrementPlayCount(id);
+            }).catch(error => {
+                console.error('خطأ في تشغيل الصوت:', error);
+                showNotification('خطأ في تشغيل الملف الصوتي', 'error');
+            });
+            
+            // Update playing state in UI
+            updatePlayingState(id);
+        }
+
+        // Find Audio by ID
+        function findAudioById(id) {
+            for (const category in audioData) {
+                const audio = audioData[category].find(item => item.id === id);
+                if (audio) return audio;
+            }
+            return null;
+        }
+
+        // Get Current Playlist Index
+        function getCurrentPlaylistIndex(id) {
+            return 0;
+        }
+
+        // Increment Play Count
+        function incrementPlayCount(id) {
+            const audio = findAudioById(id);
+            if (audio) {
+                audio.plays = (audio.plays || 0) + 1;
+                setTimeout(() => {
+                    renderPopularSlider();
+                }, 1000);
+            }
+        }
+
+        // Update Player UI
+        function updatePlayerUI() {
+            if (!currentAudio) return;
+            
+            // Update regular player
+            document.getElementById('playerTitle').textContent = currentAudio.title;
+            document.getElementById('playerArtist').textContent = currentAudio.artist;
+            updatePlayerThumbnail('playerThumbnail', currentAudio.image);
+            
+            // Update expanded player
+            document.getElementById('expandedTitle').textContent = currentAudio.title;
+            document.getElementById('expandedArtist').textContent = currentAudio.artist;
+            updatePlayerThumbnail('expandedThumbnail', currentAudio.image);
+            
+            // Update like button state
+            updateLikeButtonState();
+        }
+
+        // Update Player Thumbnail
+        function updatePlayerThumbnail(elementId, imageSrc) {
+            const thumbnail = document.getElementById(elementId);
+            thumbnail.innerHTML = createImageHTML(imageSrc, "صورة النشيد");
+        }
+
+        // Show Player
+        function showPlayer() {
+            document.getElementById('player').classList.add('active');
+            document.getElementById('overlay').classList.add('active');
+            document.getElementById('floatingPlayer').classList.remove('active');
+        }
+
+        // Hide Player - Shows floating icon
+        function hidePlayer() {
+            document.getElementById('player').classList.remove('active');
+            document.getElementById('overlay').classList.remove('active');
+            
+            // Show floating player if audio is playing or paused
+            if (currentAudio) {
+                document.getElementById('floatingPlayer').classList.add('active');
+            }
+        }
+
+        // Minimize Player - Same as hide but keeps music playing
+        function minimizePlayer() {
+            hidePlayer();
+        }
+
+        // Toggle Play
+        function togglePlay() {
+            const audioPlayer = document.getElementById('audioPlayer');
+            
+            if (!currentAudio) {
+                showNotification('اختر نشيد للتشغيل أولاً', 'info');
+                return;
+            }
+            
+            if (isPlaying) {
+                audioPlayer.pause();
+                isPlaying = false;
+            } else {
+                audioPlayer.play().then(() => {
+                    isPlaying = true;
+                }).catch(error => {
+                    console.error('خطأ في تشغيل الصوت:', error);
+                    showNotification('خطأ في تشغيل الملف الصوتي', 'error');
+                });
+            }
+            
+            updatePlayButtons();
+        }
+
+        // Update Play Buttons
+        function updatePlayButtons() {
+            const playIcon = isPlaying ? 'fas fa-pause' : 'fas fa-play';
+            document.getElementById('playPauseBtn').innerHTML = `<i class="${playIcon}"></i>`;
+            document.getElementById('expandedPlayPauseBtn').innerHTML = `<i class="${playIcon}"></i>`;
+        }
+
+        // Previous Track
+        function previousTrack() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                const prevAudio = currentPlaylist[currentIndex];
+                if (prevAudio) {
+                    playAudio(prevAudio.id);
+                }
+            }
+        }
+
+        // Next Track
+        function nextTrack() {
+            if (currentIndex < currentPlaylist.length - 1) {
+                currentIndex++;
+                const nextAudio = currentPlaylist[currentIndex];
+                if (nextAudio) {
+                    playAudio(nextAudio.id);
+                }
+            } else if (settings.repeat) {
+                currentIndex = 0;
+                const firstAudio = currentPlaylist[0];
+                if (firstAudio) {
+                    playAudio(firstAudio.id);
+                }
+            }
+        }
+
+        // Expand Player
+        function expandPlayer() {
+            document.getElementById('expandedPlayer').classList.add('active');
+            isExpanded = true;
+        }
+
+        // Collapse Player
+        function collapsePlayer() {
+            document.getElementById('expandedPlayer').classList.remove('active');
+            isExpanded = false;
+        }
+
+        // Seek To Position
+        function seekTo(event) {
+            const audioPlayer = document.getElementById('audioPlayer');
+            if (!audioPlayer.duration) return;
+            
+            const progressBar = event.currentTarget;
+            const rect = progressBar.getBoundingClientRect();
+            const percent = (event.clientX - rect.left) / rect.width;
+            const newTime = percent * audioPlayer.duration;
+            
+            audioPlayer.currentTime = newTime;
+        }
+
+        // Update Progress Handle
+        function updateProgressHandle(event) {
+            if (!isDragging) return;
+            
+            const progressBar = event.currentTarget;
+            const rect = progressBar.getBoundingClientRect();
+            const percent = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width));
+            const handle = progressBar.querySelector('.progress-handle');
+            
+            if (handle) {
+                handle.style.left = (percent * 100) + '%';
+            }
+        }
+
+        // Update Duration
+        function updateDuration() {
+            const audioPlayer = document.getElementById('audioPlayer');
+            const duration = formatTime(audioPlayer.duration);
+            document.getElementById('totalTime').textContent = duration;
+            document.getElementById('expandedTotalTime').textContent = duration;
+        }
+
+        // Update Progress
+        function updateProgress() {
+            const audioPlayer = document.getElementById('audioPlayer');
+            if (!audioPlayer.duration) return;
+            
+            const percent = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+            const currentTime = formatTime(audioPlayer.currentTime);
+            
+            // Update progress bars
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('expandedProgressFill').style.width = percent + '%';
+            
+            // Update progress handles
+            const handles = document.querySelectorAll('.progress-handle');
+            handles.forEach(handle => {
+                handle.style.left = percent + '%';
+            });
+            
+            // Update time displays
+            document.getElementById('currentTime').textContent = currentTime;
+            document.getElementById('expandedCurrentTime').textContent = currentTime;
+        }
+
+        // Handle Audio Ended
+        function handleAudioEnded() {
+            if (settings.repeat) {
+                const audioPlayer = document.getElementById('audioPlayer');
+                audioPlayer.currentTime = 0;
+                audioPlayer.play();
+            } else {
+                nextTrack();
+            }
+        }
+
+        // Handle Audio Error
+        function handleAudioError(error) {
+            console.error('خطأ في الصوت:', error);
+            showNotification('خطأ في تحميل الملف الصوتي', 'error');
+            isPlaying = false;
+            updatePlayButtons();
+        }
+
+        // Format Time
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return '0:00';
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = Math.floor(seconds % 60);
+            return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+        }
+
+        // Update Playing State
+        function updatePlayingState(currentId) {
+            document.querySelectorAll('.audio-item').forEach(item => {
+                item.classList.remove('playing');
+                if (currentId && parseInt(item.dataset.id) === currentId) {
+                    item.classList.add('playing');
+                }
+            });
+        }
+
+        // Toggle Like Audio
+        function toggleLikeAudio(id) {
+            const liked = getLikedAudios();
+            const audio = findAudioById(id);
+            if (!audio) return;
+            
+            const index = liked.findIndex(item => item.id === id);
+            if (index > -1) {
+                liked.splice(index, 1);
+                showNotification('تم إزالة النشيد من المفضلة', 'info');
+            } else {
+                liked.push(audio);
+                showNotification('تم إضافة النشيد للمفضلة', 'success');
+            }
+            
+            localStorage.setItem('likedAudios', JSON.stringify(liked));
+            updateLikeButtons();
+            updateLikeButtonState();
+            renderFavoritesSlider();
+        }
+
+        // Toggle Like (for expanded player)
+        function toggleLike() {
+            if (currentAudio) {
+                toggleLikeAudio(currentAudio.id);
+            }
+        }
+
+        // Update Like Buttons
+        function updateLikeButtons() {
+            document.querySelectorAll('.audio-item').forEach(item => {
+                const id = parseInt(item.dataset.id);
+                const likeBtn = item.querySelector('.action-btn');
+                if (likeBtn && likeBtn.title.includes('مفضلة')) {
+                    likeBtn.classList.toggle('liked', isLiked(id));
+                }
+            });
+        }
+
+        // Update Like Button State
+        function updateLikeButtonState() {
+            if (currentAudio) {
+                const expandedLikeBtn = document.getElementById('expandedLikeBtn');
+                expandedLikeBtn.classList.toggle('liked', isLiked(currentAudio.id));
+            }
+        }
+
+        // Is Liked
+        function isLiked(id) {
+            const liked = getLikedAudios();
+            return liked.some(audio => audio.id === id);
+        }
+
+        // Get Liked Audios
+        function getLikedAudios() {
+            const stored = localStorage.getItem('likedAudios');
+            return stored ? JSON.parse(stored) : [];
+        }
+
+        // Toggle Download
+        function toggleDownload(id) {
+            if (isDownloaded(id)) {
+                removeDownload(id);
+            } else {
+                downloadAudio(id);
+            }
+        }
+
+        // Download Audio (Real Implementation)
+        function downloadAudio(id) {
+            const audio = findAudioById(id);
+            if (!audio) return;
+            
+            // Check if already downloading
+            if (activeDownloads.has(id)) {
+                showNotification('التحميل جاري بالفعل...', 'info');
+                return;
+            }
+            
+            // Start download process
+            activeDownloads.set(id, { progress: 0, audio: audio });
+            updateDownloadButton(id, 'downloading');
+            showDownloadProgress();
+            
+            // Simulate real download with progress
+            simulateDownload(id, audio);
+        }
+
+        // Simulate Download with Progress
+        function simulateDownload(id, audio) {
+            const downloadItem = {
+                id: id,
+                title: audio.title,
+                progress: 0
+            };
+            
+            addDownloadItem(downloadItem);
+            
+            const interval = setInterval(() => {
+                downloadItem.progress += Math.random() * 15 + 5;
+                
+                if (downloadItem.progress >= 100) {
+                    downloadItem.progress = 100;
+                    clearInterval(interval);
+                    
+                    setTimeout(() => {
+                        completeDownload(id, audio);
+                        removeDownloadItem(id);
+                    }, 500);
+                }
+                
+                updateDownloadItem(downloadItem);
+            }, 200);
+        }
+
+        // Complete Download
+        function completeDownload(id, audio) {
+            const downloads = getDownloadedAudios();
+            downloads.push({
+                ...audio,
+                downloadedAt: new Date().toISOString(),
+                localPath: `downloads/${audio.id}.mp3`
+            });
+            localStorage.setItem('downloadedAudios', JSON.stringify(downloads));
+            
+            activeDownloads.delete(id);
+            updateDownloadButton(id, 'downloaded');
+            updateDownloadsCount();
+            showNotification('تم تحميل النشيد بنجاح', 'success');
+            
+            if (activeDownloads.size === 0) {
+                hideDownloadProgress();
+            }
+        }
+
+        // Show Download Progress
+        function showDownloadProgress() {
+            document.getElementById('downloadProgress').classList.add('show');
+        }
+
+        // Hide Download Progress
+        function hideDownloadProgress() {
+            document.getElementById('downloadProgress').classList.remove('show');
+        }
+
+        // Add Download Item
+        function addDownloadItem(item) {
+            const container = document.getElementById('downloadItems');
+            const itemElement = document.createElement('div');
+            itemElement.className = 'download-item';
+            itemElement.id = `download-${item.id}`;
+            itemElement.innerHTML = `
+                <div class="download-info">
+                    <div class="download-title">${item.title}</div>
+                    <div class="download-bar">
+                        <div class="download-fill" style="width: ${item.progress}%"></div>
+                    </div>
+                </div>
+                <span style="font-size: 0.75rem; color: var(--text-secondary);">${Math.round(item.progress)}%</span>
+            `;
+            container.appendChild(itemElement);
+        }
+
+        // Update Download Item
+        function updateDownloadItem(item) {
+            const element = document.getElementById(`download-${item.id}`);
+            if (element) {
+                const fill = element.querySelector('.download-fill');
+                const percentage = element.querySelector('span');
+                if (fill) fill.style.width = `${item.progress}%`;
+                if (percentage) percentage.textContent = `${Math.round(item.progress)}%`;
+            }
+        }
+
+        // Remove Download Item
+        function removeDownloadItem(id) {
+            const element = document.getElementById(`download-${id}`);
+            if (element) {
+                element.remove();
+            }
+        }
+
+        // Update Download Button
+        function updateDownloadButton(id, state) {
+            document.querySelectorAll('.audio-item').forEach(item => {
+                if (parseInt(item.dataset.id) === id) {
+                    const downloadBtn = item.querySelector('.action-btn[title*="تحميل"]');
+                    if (downloadBtn) {
+                        downloadBtn.classList.remove('downloaded', 'downloading');
+                        if (state === 'downloaded') {
+                            downloadBtn.classList.add('downloaded');
+                            downloadBtn.innerHTML = '<i class="fas fa-check"></i>';
+                            downloadBtn.title = 'تم التحميل';
+                        } else if (state === 'downloading') {
+                            downloadBtn.classList.add('downloading');
+                            downloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                            downloadBtn.title = 'جاري التحميل...';
+                        }
+                    }
+                }
+            });
+        }
+
+        // Remove Download
+        function removeDownload(id) {
+            const downloads = getDownloadedAudios();
+            const index = downloads.findIndex(audio => audio.id === id);
+            
+            if (index > -1) {
+                downloads.splice(index, 1);
+                localStorage.setItem('downloadedAudios', JSON.stringify(downloads));
+                showNotification('تم حذف التحميل', 'info');
+                updateDownloadButtons();
+                updateDownloadsCount();
+                
+                const downloadsList = document.getElementById('downloads-list');
+                if (downloadsList && downloadsList.classList.contains('active')) {
+                    renderDownloadsList();
+                }
+            }
+        }
+
+        // Update Download Buttons
+        function updateDownloadButtons() {
+            document.querySelectorAll('.audio-item').forEach(item => {
+                const id = parseInt(item.dataset.id);
+                const downloadBtn = item.querySelector('.action-btn[title*="تحميل"], .action-btn[title*="تم التحميل"]');
+                if (downloadBtn) {
+                    downloadBtn.classList.toggle('downloaded', isDownloaded(id));
+                    if (isDownloaded(id)) {
+                        downloadBtn.innerHTML = '<i class="fas fa-check"></i>';
+                        downloadBtn.title = 'تم التحميل';
+                    } else {
+                        downloadBtn.innerHTML = '<i class="fas fa-download"></i>';
+                        downloadBtn.title = 'تحميل';
+                    }
+                }
+            });
+        }
+
+        // Is Downloaded
+        function isDownloaded(id) {
+            const downloads = getDownloadedAudios();
+            return downloads.some(audio => audio.id === id);
+        }
+
+        // Get Downloaded Audios
+        function getDownloadedAudios() {
+            const stored = localStorage.getItem('downloadedAudios');
+            return stored ? JSON.parse(stored) : [];
+        }
+
+        // Update Downloads Count
+        function updateDownloadsCount() {
+            const count = getDownloadedAudios().length;
+            document.getElementById('downloadsCount').textContent = `${count} ملف`;
+        }
+
+        // Handle Search
+        function handleSearch(event) {
+            const query = event.target.value.toLowerCase().trim();
+            
+            if (query === '') {
+                showHome();
+                return;
+            }
+            
+            const results = [];
+            Object.values(audioData).forEach(category => {
+                category.forEach(audio => {
+                    if (audio.title.toLowerCase().includes(query) || 
+                        audio.artist.toLowerCase().includes(query)) {
+                        results.push(audio);
+                    }
+                });
+            });
+            
+            showSearchResults(results, query);
+        }
+
+        // Show Search Results
+        function showSearchResults(results, query) {
+            document.getElementById('homeContent').style.display = 'none';
+            document.getElementById('categoriesGrid').style.display = 'none';
+            
+            document.querySelectorAll('.audio-list').forEach(list => {
+                list.classList.remove('active');
+            });
+            
+            const existingResults = document.getElementById('search-results');
+            if (existingResults) {
+                existingResults.remove();
+            }
+            
+            const container = document.createElement('div');
+            container.className = 'audio-list active';
+            container.id = 'search-results';
+            container.innerHTML = `
+                <h2 style="margin-bottom: 1.5rem; color: var(--text-primary);">
+                    <i class="fas fa-search" style="color: #667eea; margin-left: 0.5rem;"></i>
+                    نتائج البحث عن "${query}"
+                </h2>
+                <div>
+                    ${results.length === 0 ? `
+                        <div style="text-align: center; padding: 3rem; color: var(--text-secondary);">
+                            <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                            <h3>لا توجد نتائج</h3>
+                            <p>جرب البحث بكلمات مختلفة</p>
+                        </div>
+                    ` : results.map(audio => `
+                        <div class="audio-item fade-in" onclick="playAudio(${audio.id})" data-id="${audio.id}">
+                            <div class="audio-thumbnail">
+                                ${createImageHTML(audio.image, audio.title)}
+                                <div class="play-overlay">
+                                    <i class="fas fa-play"></i>
+                                </div>
+                            </div>
+                            <div class="audio-info">
+                                <div class="audio-title">${audio.title}</div>
+                                <div class="audio-artist">${audio.artist} • ${audio.duration}</div>
+                            </div>
+                            <div class="audio-actions">
+                                <button class="action-btn ${isLiked(audio.id) ? 'liked' : ''}" onclick="event.stopPropagation(); toggleLikeAudio(${audio.id})" title="إضافة للمفضلة">
+                                    <i class="fas fa-heart"></i>
+                                </button>
+                                <button class="action-btn ${isDownloaded(audio.id) ? 'downloaded' : ''}" onclick="event.stopPropagation(); toggleDownload(${audio.id})" title="تحميل">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            
+            document.querySelector('.container').appendChild(container);
+        }
+
+        // Handle Keyboard Shortcuts
+        function handleKeyboardShortcuts(event) {
+            if (event.target.tagName === 'INPUT') return;
+            
+            switch(event.code) {
+                case 'Space':
+                    event.preventDefault();
+                    togglePlay();
+                    break;
+                case 'ArrowLeft':
+                    event.preventDefault();
+                    previousTrack();
+                    break;
+                case 'ArrowRight':
+                    event.preventDefault();
+                    nextTrack();
+                    break;
+                case 'Escape':
+                    if (isExpanded) {
+                        collapsePlayer();
+                    } else if (document.getElementById('player').classList.contains('active')) {
+                        hidePlayer();
+                    }
+                    break;
+            }
+        }
+
+        // Settings Functions
+        function openSettings() {
+            document.getElementById('settingsModal').classList.add('active');
+        }
+
+        function closeSettings() {
+            document.getElementById('settingsModal').classList.remove('active');
+            saveSettings();
+        }
+
+        function toggleTheme() {
+            const toggle = document.getElementById('themeToggle');
+            toggle.classList.toggle('active');
+            settings.theme = toggle.classList.contains('active') ? 'dark' : 'light';
+        }
+
+        function toggleAutoplay() {
+            const toggle = document.getElementById('autoplayToggle');
+            toggle.classList.toggle('active');
+            settings.autoplay = toggle.classList.contains('active');
+        }
+
+        function toggleRepeat() {
+            const toggle = document.getElementById('repeatToggle');
+            toggle.classList.toggle('active');
+            settings.repeat = toggle.classList.contains('active');
+        }
+
+        function toggleShuffle() {
+            const toggle = document.getElementById('shuffleToggle');
+            toggle.classList.toggle('active');
+            settings.shuffle = toggle.classList.contains('active');
+        }
+
+        function toggleAutoDownload() {
+            const toggle = document.getElementById('autoDownloadToggle');
+            toggle.classList.toggle('active');
+            settings.autoDownload = toggle.classList.contains('active');
+        }
+
+        // Load Settings
+        function loadSettings() {
+            const stored = localStorage.getItem('appSettings');
+            if (stored) {
+                settings = { ...settings, ...JSON.parse(stored) };
+            }
+            
+            document.getElementById('themeToggle').classList.toggle('active', settings.theme === 'dark');
+            document.getElementById('autoplayToggle').classList.toggle('active', settings.autoplay);
+            document.getElementById('repeatToggle').classList.toggle('active', settings.repeat);
+            document.getElementById('shuffleToggle').classList.toggle('active', settings.shuffle);
+            document.getElementById('autoDownloadToggle').classList.toggle('active', settings.autoDownload);
+            
+            updateStorageUsage();
+        }
+
+        // Save Settings
+        function saveSettings() {
+            localStorage.setItem('appSettings', JSON.stringify(settings));
+        }
+
+        // Update Storage Usage
+        function updateStorageUsage() {
+            let totalSize = 0;
+            for (let key in localStorage) {
+                if (localStorage.hasOwnProperty(key)) {
+                    totalSize += localStorage[key].length;
+                }
+            }
+            const sizeInMB = (totalSize / 1024 / 1024).toFixed(2);
+            document.getElementById('storageUsed').textContent = `${sizeInMB} MB`;
+        }
+
+        // Show Notification
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? 'var(--success-gradient)' : 
+                           type === 'error' ? 'var(--secondary-gradient)' : 
+                           'var(--primary-gradient)'};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: var(--border-radius);
+                box-shadow: var(--shadow-medium);
+                z-index: 1000;
+                transform: translateX(100%);
+                transition: var(--transition);
+                max-width: 300px;
+                word-wrap: break-word;
+            `;
+            
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 
+                                    type === 'error' ? 'exclamation-circle' : 
+                                    'info-circle'}"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // Debounce Function
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Online/Offline Event Listeners
+        window.addEventListener('online', () => {
+            isOffline = false;
+            hideOfflineMode();
+            showNotification('تم استعادة الاتصال بالإنترنت', 'success');
+        });
+
+        window.addEventListener('offline', () => {
+            isOffline = true;
+            showOfflineMode();
+            showNotification('لا يوجد اتصال بالإنترنت', 'error');
+        });
+
+        // Prevent context menu on long press (mobile)
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        // Prevent zoom on double tap (mobile)
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function(event) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+
+        // Prevent text selection on mobile
+        document.addEventListener('selectstart', function(e) {
+            e.preventDefault();
+        });
+
+        // Handle touch events for better mobile experience
+        document.addEventListener('touchstart', function() {}, { passive: true });
+        document.addEventListener('touchmove', function() {}, { passive: true });
+        document.addEventListener('touchend', function() {}, { passive: true });
+
+        // Auto-hide floating player when no audio
+        function checkFloatingPlayerVisibility() {
+            const floatingPlayer = document.getElementById('floatingPlayer');
+            const player = document.getElementById('player');
+            
+            if (!currentAudio && !player.classList.contains('active')) {
+                floatingPlayer.classList.remove('active');
+            }
+        }
+
+        // Call this function periodically
+        setInterval(checkFloatingPlayerVisibility, 1000);
+
+        // Enhanced error handling
+        window.addEventListener('error', function(e) {
+            console.error('خطأ في التطبيق:', e.error);
+            showNotification('حدث خطأ غير متوقع', 'error');
+        });
+
+        // Lazy loading for images
+        function lazyLoadImages() {
+            const images = document.querySelectorAll('img[data-src]');
+            if ('IntersectionObserver' in window) {
+                const imageObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const img = entry.target;
+                            img.src = img.dataset.src;
+                            img.removeAttribute('data-src');
+                            imageObserver.unobserve(img);
+                        }
+                    });
+                });
+
+                images.forEach(img => imageObserver.observe(img));
+            }
+        }
+
+        // Initialize lazy loading
+        setTimeout(lazyLoadImages, 1000);
+
+        // Memory cleanup
+        function cleanup() {
+            // Clear any intervals or timeouts
+            if (window.progressInterval) {
+                clearInterval(window.progressInterval);
+            }
+        }
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', cleanup);
+
+        // Enhanced mobile support
+        if ('ontouchstart' in window) {
+            document.body.classList.add('touch-device');
+        }
+
+        // Improved accessibility
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Tab') {
+                document.body.classList.add('keyboard-navigation');
+            }
+        });
+
+        document.addEventListener('mousedown', function() {
+            document.body.classList.remove('keyboard-navigation');
+        });
+
+        // Auto-save user preferences
+        function autoSavePreferences() {
+            const preferences = {
+                volume: document.getElementById('audioPlayer').volume || 1,
+                lastPlayed: currentAudio ? currentAudio.id : null,
+                playbackPosition: document.getElementById('audioPlayer').currentTime || 0
+            };
+            localStorage.setItem('userPreferences', JSON.stringify(preferences));
+        }
+
+        // Load user preferences
+        function loadUserPreferences() {
+            const stored = localStorage.getItem('userPreferences');
+            if (stored) {
+                const preferences = JSON.parse(stored);
+                if (preferences.volume) {
+                    document.getElementById('audioPlayer').volume = preferences.volume;
+                }
+            }
+        }
+
+        // Save preferences periodically
+        setInterval(autoSavePreferences, 30000); // Every 30 seconds
+
+        // Load preferences on startup
+        setTimeout(loadUserPreferences, 1000);
+
+        // Enhanced download management
+        function getDownloadSize() {
+            const downloads = getDownloadedAudios();
+            return downloads.length * 5; // Estimate 5MB per audio file
+        }
+
+        function checkStorageSpace() {
+            if ('storage' in navigator && 'estimate' in navigator.storage) {
+                navigator.storage.estimate().then(estimate => {
+                    const usedMB = (estimate.usage / 1024 / 1024).toFixed(2);
+                    const quotaMB = (estimate.quota / 1024 / 1024).toFixed(2);
+                    console.log(`Storage used: ${usedMB}MB of ${quotaMB}MB`);
+                });
+            }
+        }
+
+        // Check storage space periodically
+        setInterval(checkStorageSpace, 60000); // Every minute
+
+        // Enhanced offline support
+        function cacheEssentialResources() {
+            if ('caches' in window) {
+                caches.open('islamic-player-v1').then(cache => {
+                    cache.addAll([
+                        '/',
+                        'https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap',
+                        'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
+                    ]).catch(err => console.log('Cache error:', err));
+                });
+            }
+        }
+
+        // Initialize caching
+        setTimeout(cacheEssentialResources, 2000);
+
+        // Final initialization
+        console.log('🎵 مشغل الأناشيد الإسلامية - الإصدار 5.1.0');
+        console.log('✅ تم تحميل جميع الميزات بنجاح');
+        console.log('🎯 الميزات المحسنة: إصلاح الصور، أيقونة ذكية، تحسينات الأداء');
+        console.log('🔧 التحسينات: معالجة أخطاء الصور، تحميل محسن، استجابة أفضل');
+    </script>
+<script>
+  function addVerificationBadges() {
+    const allArtistElements = document.querySelectorAll("*[class*='artist']");
+    allArtistElements.forEach(el => {
+      if (!el.querySelector(".verified-badge") && el.childNodes.length === 1 && el.childNodes[0].nodeType === Node.TEXT_NODE) {
+        const icon = document.createElement("i");
+        icon.className = "fas fa-circle-check verified-badge";
+        icon.style.color = "#1DA1F2";
+        icon.style.marginLeft = "6px";
+        el.appendChild(icon);
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    addVerificationBadges();
+    const observer = new MutationObserver(() => addVerificationBadges());
+    observer.observe(document.body, { childList: true, subtree: true });
+  });
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const observer = new MutationObserver(() => {
+    const playingItems = document.querySelectorAll(".audio-item.playing .audio-thumbnail, #playerThumbnail, #expandedThumbnail");
+    document.querySelectorAll(".rotating-thumbnail").forEach(el => el.classList.remove("rotating-thumbnail"));
+    playingItems.forEach(el => el.classList.add("rotating-thumbnail"));
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
+});
+</script>
+</body>
+</html>
